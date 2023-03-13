@@ -35,9 +35,7 @@ After toying with ChatGPT, I feel confident I can prompt it well enough to get
 it to convert a database assignment a conceptual model, that can then be fed
 into MeriseAcide.
 
-I will limit the cardinality of the relations to the few most basics (ChatGPT is
-easily confused with counting), and forgo relative associations (propagation of
-foreign keys across multiple relations, for when you need a unique key over
-multiple 0,n relations). But this is enough for a reasonable demo. And in my
-experience at three difference schools, they never taught more than the very
-basic anyways.
+The web stack will be Rust, with the Rocket web framework. The web server will
+serve the files (HTML, CSS, JS...) and offer few APIs to forward the query to
+ChatGTP, run the MeriseAcide binary, and return the produced files.
+The single page client side will be implemented with Vue.js with typescript.
