@@ -1,8 +1,36 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
 import Tile from './components/Tile.vue'
 import GraphRender from './components/GraphRender.vue'
+import SQL from './components/SQL.vue'
+
+import { reactive, computed, onMounted, watch } from 'vue'
+
+import axios from "axios"
+
+interface State {
+  solvedID?: string,
+  assignment: string,
+}
+
+const state: State = reactive({
+  solvedID: undefined,
+  assignment: "",
+})
+
+const solved_id_re = new RegExp("/play/([a-zA-Z0-9]{15})/?");
+onMounted(() => {
+	let match = location.pathname.match(solved_id_re);
+	if (match) {
+		state.solvedID = match[1];
+	}
+})
+
+watch(() => state.solvedID, async (solvedID) => {
+	if (solvedID !== undefined) {
+		let response = await axios.get(__PLAY_URL__ + state.solvedID + "/assignment.txt");
+		state.assignment = response.data;
+	}
+})
 </script>
 
 <template>
@@ -22,32 +50,17 @@ import GraphRender from './components/GraphRender.vue'
 			<a>Another one</a>
 			<a>One more</a>
 		</div>
-		<textarea  class="maximized">Assignment: Conceptual Modeling of a Movie Rental System
-
-Description: You are tasked with modeling a movie rental system for a local video store. The system should keep track of customers, movies, rentals, and late fees.
-
-Entities:
-
-Customer: A person who rents movies from the store. Each customer has a unique customer ID, name, address, phone number, and email address.
-Movie: A movie that can be rented from the store. Each movie has a unique movie ID, title, release year, genre, director, and length.
-Rental: A rental is a transaction where a customer rents a movie for a specified period of time. Each rental has a unique rental ID, a rental date, a due date, and a return date.
-Late Fee: A late fee is a charge that is applied to a rental if the movie is returned after the due date. Each late fee has a unique late fee ID, an amount, and a date.
-
-Relations:
-
-A customer can rent many movies, but a movie can only be rented by one customer at a time.
-A rental is associated with one customer and one movie.
-A movie can have many late fees, and a late fee is associated with only one movie.</textarea>
+		<textarea class="maximized" placeholder="Describe here the entities and relation you want. Load some examples with the link above.">{{ state.assignment }}</textarea>
 	<button>Draw me a db</button>
 	</Tile>
 	<Tile title="Conceptual model">
-		<GraphRender placeholder_img="/placeholder_conceptual.png" />
+		<GraphRender kind="conceptual" :solvedID=state.solvedID />
 	</Tile>
 	<Tile title="Physical model">
-		<GraphRender placeholder_img="placeholder_physical.png" />
+		<GraphRender kind="physical" :solvedID=state.solvedID />
 	</Tile>
 	<Tile title="SQL Schema">
-		<textarea class="maximized">CREATE TABLE ...</textarea>
+		<SQL :solvedID=state.solvedID />
 	</Tile>
   </main>
 </template>
