@@ -3,3 +3,4 @@ address = "0.0.0.0"
 
 [debug]
 port = 8042
+cors_all = true
