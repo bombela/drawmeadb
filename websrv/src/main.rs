@@ -1,5 +1,5 @@
 use rocket::{
-    fairing::{Fairing, Info, Kind},
+    fairing::{Fairing, Info, Kind, AdHoc},
     http::Header,
     Request, Response, serde::Deserialize,
 };
@@ -8,6 +8,12 @@ use rocket::{
 extern crate rocket;
 
 mod play;
+
+#[derive(Deserialize)]
+#[serde(crate = "rocket::serde")]
+struct Config {
+    chatgpt_api_key: String,
+}
 
 #[get("/")]
 fn index() -> &'static str {
@@ -20,15 +26,16 @@ fn rocket() -> _ {
 
     #[derive(Deserialize)]
     #[serde(crate = "rocket::serde")]
-    struct Config {
+    struct CorsConfig {
         cors_all: bool,
     }
-
-    let config: Config = rocket.figment().extract().unwrap();
+    let config: CorsConfig = rocket.figment().extract().unwrap();
     if config.cors_all {
         rocket = rocket.attach(Cors);
     }
+
     rocket
+        .attach(AdHoc::config::<Config>())
         .mount("/", routes![index])
         .mount("/play", play::routes())
 }

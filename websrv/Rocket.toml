@@ -1,6 +1,7 @@
 [default]
 address = "0.0.0.0"
+chatgpt_api_key = "" # ChatGPT API key
 
 [debug]
 port = 8042
-cors_all = true
+cors_all = true # Allow CORS from all domains.
