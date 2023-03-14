@@ -1,0 +1,58 @@
+0.4.7
+	- Compilation de la libgraphviz avec le support intégré
+	de la libltdl afin d'augmenter la compatibilités multi-archi.
+
+0.4.6
+	- Le parseur d'association est plus intelligent.
+	Il ne fait plus de faux positif sur des propriétés utilisant un type SQL exotique.
+
+0.4.5
+	- Les associations en cardinalitées 0/1,1 - 0/1,1 sont maintenant acceptées.
+	- Il est possible de compose un champ aussi à gauche (id_ et _id).
+	- Le fichier d'exemple syntax.ma démontre l'utilisation des accents et des
+	deux corrections précédentes.
+
+0.4.4
+	- Correction du script de lancement qui ne détectait pas
+	correctement les liens symboliques.
+	- Plus d'avertissement de conversion const char* vers char* avec gcc 4.2.3.
+	- Compatible avec CMake 2.6
+
+0.4.3
+	- Version sous licence GPL v3.
+
+0.4.2
+	- Ajout d'une option permettant de désactiver la
+	génération des contraintes d'intégrités sur les clés
+	étrangères pour la sortie SQL (Option -n).
+
+0.4.1
+	- Correction de la génération SQL des contraintes de clés
+	étrangères sur des clés elles mêmes clés étrangères.
+	- Support intelligent du SERIAL et BIGSERIAL.
+
+0.4.0
+	- Ajout de la génération PostgreSQL.
+	- Ajout du fichier d'exemple syntax.ma.
+	- Correction de la génération MySQL qui produisait des clés
+	étrangères portant le même nom que leurs clé de référence.
+	- Correction de la génération SQL de clés étrangères qui
+	se trouvaient séparées en plusieurs parties.
+
+0.3.9
+	- Tous les textes sont bien en Anglais.
+	- Refactoring du code (Gain de quelques nano-secondes ^^).
+
+0.3.8
+	- Correction du point virgule aléatoire en sortie SQL.
+
+0.3.7
+	- Correction de la sortie SQL des clé étrangères,
+	elles n'apparaissaient pas !
+	- Correction de la sortie SQLite, le commentaire
+	invalide à été remplacé.
+
+0.3.6
+	- Flèches du MPD à l'endroit.
+	- Accents supportés.
+	- Détails sur les FKeys ajouté au MPD.

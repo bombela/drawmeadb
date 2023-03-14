@@ -1,0 +1,31 @@
+# MCD Database class.
+# Bombela - <bombela@free.fr>
+# $Id: MCD.uml 25 2008-01-21 00:49:53Z bombela $
+
+/Import Base.uml
+
+[MCDDatabase]
+=>MCDEntity
+=>MCDAssociation
+->MCDField
+->MCDParser
++LoadFromParser(const MCDParser&)
+
+[MCDEntity]
+@>MCDField
+@>MCDField
+-MCDField KeyList
+-MCDField FieldList
+std::string mName
++std::string GetName(void) const
+
+[MCDAssociation]
+@>Cardinality
+@>MCDField
+-MCDField FieldList
+std::string mName
++std::string GetName(void) const
+
+[MCDField]
+std::string mName
++std::string GetName(void) const

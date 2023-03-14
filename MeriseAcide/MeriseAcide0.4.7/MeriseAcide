@@ -1,0 +1,45 @@
+#!/bin/bash
+# Bombela - 2008 - <bombela@free.fr>
+# $Id: MeriseAcide 86 2008-08-09 20:07:04Z bombela $
+
+# Check symlink.
+if [ -h "$0" ]
+then
+	readonly Self="$(readlink "$0")"
+else
+	readonly Self="$0"
+fi
+
+BIN_DIR="$(dirname "$Self")"
+
+if [ -z "$ARCH_SIZE" ]
+then
+	if [ "$(uname -m)" = "x86_64" ]
+	then
+		ARCH_SIZE=64
+	else
+		ARCH_SIZE=32
+	fi
+fi
+
+LD_LIBRARY_PATH="$BIN_DIR/libgv_Linux$ARCH_SIZE"
+
+if [ ! -d "$LD_LIBRARY_PATH" ]
+then
+	echo "Error: $LD_LIBRARY_PATH not found."
+	exit 1
+fi
+
+EXE="$BIN_DIR/MeriseAcide_Linux$ARCH_SIZE"
+
+if [ ! -f "$EXE" ]
+then
+	echo "Error: $EXE not found."
+	exit 1
+fi
+
+export LD_LIBRARY_PATH
+exec "$EXE" $@
+
+echo "Starting $EXE failed !"
+exit 2

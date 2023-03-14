@@ -1,0 +1,44 @@
+# MCD Parser class.
+# Bombela - <bombela@free.fr>
+# $Id: MCDParser.uml 25 2008-01-21 00:49:53Z bombela $
+
+/Import Base.uml
+
+[MCDParserFieldContener]
+@>MCDParserField
+MCDParserFieldList mFieldList
++const MCDParserFieldList GetFieldList(void) const
++MCDParserField& NewField(void)
+
+[MCDParser]
+=>MCDParserEntity
+=>MCDParserAssociation
+->MCDParserField
+->MCDParserFieldContener
++std::string GetErrorMsg(void) const
+
+[MCDParserEntity:MCDParserFieldContener]
+std::string mName
++std::string GetName(void) const
++bool LoadFromString(const std::string& Line)
++std::string GetErrorMsg(void) const
+
+[MCDParserAssociation:MCDParserFieldContener]
+@>MCDParserCardinality
+std::string mName
++std::string GetName(void) const
++bool LoadFromString(const std::string& Line)
++std::string GetErrorMsg(void) const
+
+[MCDParserField]
+std::string mName
++std::string GetName(void) const
++bool LoadFromString(const std::string& Line)
++std::string GetErrorMsg(void) const
+
+[MCDParserCardinality:Cardinality]
+->MCDParserCardinalityValue
+bool LoadFromString(void)
+
+[MCDParserCardinalityValue:CardinalityValue]
+bool LoadFromString(void)

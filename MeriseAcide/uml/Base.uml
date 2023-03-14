@@ -1,0 +1,24 @@
+# Base class.
+# Bombela - <bombela@free.fr>
+# $Id: Base.uml 25 2008-01-21 00:49:53Z bombela $
+
+# Base class.
+
+[Options]
+
+[MeriseAcide]
+=>Options
+=>MCDParser
+=>MCDDatabase
+=>MPDDatabase
+
+[CardinalityValue]
+int GetMin(void)
+int GetMax(void)
+bool IsInfinite(void)
+
+[Cardinality]
+@>CardinalityValue
+@>CardinalityValue
+CardinalityValue GetLeft(void)
+CardinalityValue GetRight(void)

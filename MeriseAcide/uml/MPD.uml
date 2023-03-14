@@ -1,0 +1,32 @@
+# MPD class.
+# Bombela - <bombela@free.fr>
+# $Id: MPD.uml 26 2008-01-21 22:00:03Z bombela $
+
+/Import Base.uml
+
+[MPDDatabase]
+=>MPDTable
+=>MPDLink
+->MPDField
+->MCDDatabase
++LoadFromMCDDatabase(const MCDDatabase&)
+
+[MPDTable]
+@>MPDField
+@>MPDField
+@>MPDField
+-MPDField KeyList
+-MPDField FieldList
+-MPDField FkList
+std::string mName
++std::string GetName(void) const
+
+[MPDLink]
+@>MPDField
+-MPDField FieldList
+std::string mName
++std::string GetName(void) const
+
+[MPDField]
+std::string mName
++std::string GetName(void) const
