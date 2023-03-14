@@ -31,6 +31,16 @@ watch(() => state.solvedID, async (solvedID) => {
 		state.assignment = response.data;
 	}
 })
+
+function fetch_example(source: MouseEvent) {
+	if (source.target) {
+		let name: string = source.target.name;
+		axios.get("/" + name + ".txt").then((response) => {
+			state.assignment = response.data;
+		});
+	}
+	return true;
+}
 </script>
 
 <template>
@@ -45,10 +55,10 @@ watch(() => state.solvedID, async (solvedID) => {
   <main>
 	<Tile title="Assignment">
 		<div>
-			Example:
-			<a>Movie theater</a>
-			<a>Another one</a>
-			<a>One more</a>
+			Examples:
+			<a @click="fetch_example" name="ex1" href="javascript:void(0)">Movie theater</a>,
+			<a @click="fetch_example" name="ex2" href="javascript:void(0)">Bookstore</a>,
+			<a @click="fetch_example" name="ex3" href="javascript:void(0)">Fitness tracker</a>.
 		</div>
 		<textarea class="maximized" placeholder="Describe here the entities and relation you want. Load some examples with the link above.">{{ state.assignment }}</textarea>
 	<button>Draw me a db</button>

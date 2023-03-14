@@ -1,0 +1,16 @@
+Assignment: Conceptual Modeling of a Movie Rental System
+
+Description: You are tasked with modeling a movie rental system for a local video store. The system should keep track of customers, movies, rentals, and late fees.
+
+Entities:
+
+Customer: A person who rents movies from the store. Each customer has a unique customer ID, name, address, phone number, and email address.
+Movie: A movie that can be rented from the store. Each movie has a unique movie ID, title, release year, genre, director, and length.
+Rental: A rental is a transaction where a customer rents a movie for a specified period of time. Each rental has a unique rental ID, a rental date, a due date, and a return date.
+Late Fee: A late fee is a charge that is applied to a rental if the movie is returned after the due date. Each late fee has a unique late fee ID, an amount, and a date.
+
+Relations:
+
+A customer can rent many movies, but a movie can only be rented by one customer at a time.
+A rental is associated with one customer and one movie.
+A movie can have many late fees, and a late fee is associated with only one movie.

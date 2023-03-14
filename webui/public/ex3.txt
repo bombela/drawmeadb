@@ -1,0 +1,6 @@
+Design a relational database for a fitness tracking app that allows users to track their workouts, exercises, and gym memberships Add any additional attributes or entities you deem necessary. You must apply the following relations:
+
+    - A user can perform one or more workouts
+    - A workout consists of one or more exercises
+    - A user can belong to one or more gyms
+    - A workout can be led by one or more trainers

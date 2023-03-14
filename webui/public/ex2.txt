@@ -1,0 +1,1 @@
+Design a relational database for an online bookstore that allows customers to search for books, place orders, and make payments. Your schema should include few entities, like Book, Author, Customer, Order and Payment. Add additional attributes or entities you deem necessary. You should have at least 4 relations, and consider the cardinalities carefully.

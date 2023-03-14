@@ -6,17 +6,13 @@ const props = defineProps<{
   solvedID?: string,
 }>()
 
-const placeholder_img = computed(() => "placeholder_" + props.kind + ".png")
+const placeholder_img = computed(() => "/placeholder_" + props.kind + ".png")
 const img = computed(() => __PLAY_URL__ + props.solvedID + "/" + props.kind + ".png")
 </script>
 
 <template>
-	<template v-if="solvedID === undefined">
-		<img class="graph-render" :src=placeholder_img>
-	</template>
-	<template v-else>
-		<img class="graph-render" :src=img>
-	</template>
+	<img v-if="solvedID === undefined" class="graph-render" :src=placeholder_img>
+	<img v-else class="graph-render" :src=img>
 </template>
 
 <style scoped>
