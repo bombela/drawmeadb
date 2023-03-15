@@ -67,6 +67,7 @@ Here are some important rules you must absolutely respect:
  - Entities must have a unique name.
  - Associations must have unique names.
  - Associations can only refer to existing entities only.
+ - You must have associations for all entities.
 
 If any of these rules is violated, your answer will be discarded, and you will
 be ignored and forgotten.

@@ -100,7 +100,7 @@ async fn run_merise_acide(dir: &Path) -> Result<(), String> {
     cmd.args(&["-m".into(), dir.join("conceptual.png")]);
     cmd.args(&["-p".into(), dir.join("physical.png")]);
     cmd.args(&["-s".into(), dir.join("schema.txt")]);
-    cmd.args(&["-f", "png", "-t", "SQLite"]);
+    cmd.args(&["-f", "png", "-t", "MySQL"]);
     cmd.args(&["-c", "-E", "#edf7fc", "-A", "#E2E2E2", "-B", "#FFFFFF"]);
     cmd.arg(dir.join("answer.txt"));
 
@@ -188,8 +188,8 @@ async fn ask_chatgpt(
 
     let request_body = ChatGPTCompletionRequest {
         model: "gpt-3.5-turbo",
-        temperature: 0.8,
-        max_tokens: 128,
+        temperature: 0.9,
+        max_tokens: 512,
         messages: vec![
             ChatGPTMessage {
                 role: ChatGTPMessageRole::System,

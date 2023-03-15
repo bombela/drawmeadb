@@ -97,7 +97,7 @@ const is_submit_disabled = computed(() => {
 			<div v-if=state.last_submission_succeeded class="info">Try again for a different answer.</div>
 			
 			<button class="submit_assignment" @click="submit_assignment" :disabled="is_submit_disabled">
-				<Spinner v-if=is_submit_disabled></Spinner>
+				<Spinner v-if=state.updating></Spinner>
 				<span v-else>Draw me a db</span>
 			</button>
 		</div>
