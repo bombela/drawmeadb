@@ -11,13 +11,16 @@ const img = computed(() => __PLAY_URL__ + props.solvedID + "/" + props.kind + ".
 </script>
 
 <template>
-	<img v-if="solvedID === undefined" class="graph-render" :src=placeholder_img>
-	<img v-else class="graph-render" :src=img>
+	<div class="imgbox">
+		<img v-if="solvedID === undefined" class="graph-render" :src=placeholder_img>
+		<img v-else class="graph-render" :src=img>
+	</div>
 </template>
 
 <style scoped>
-.graph-render_off {
-	max-width: 100%;
+.imgbox {
+	border: 1px solid var(--color-border);
+	border-radius: 4px;
 }
 </style>
 

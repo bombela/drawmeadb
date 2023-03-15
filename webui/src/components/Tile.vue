@@ -6,8 +6,8 @@ defineProps<{
 
 <template>
 	<div class="square">
-		<p>{{ title }}</p>
-		<div>
+		<h2>{{ title }}</h2>
+		<div class="content">
 			<slot></slot>
 		</div>
 	</div>
@@ -15,17 +15,15 @@ defineProps<{
 
 <style scoped>
 .square {
-	border: solid 1px orange;
-	border-radius: 4px;
 	width: 100%;
 	margin: 10px;
-	padding: 10px;
+	padding: 2.5em;
 }
 
-h1 {
-  font-weight: 500;
-  font-size: 2.6rem;
+h2 {
+  font-weight: 800;
   top: -10px;
+  text-decoration: underline;
 }
 
 h3 {

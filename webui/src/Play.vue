@@ -12,6 +12,7 @@ interface State {
   assignment: string,
   updating: boolean,
   error?: string,
+  last_submission_succeeded: boolean,
 }
 
 const state: State = reactive({
@@ -19,6 +20,7 @@ const state: State = reactive({
   assignment: "",
   updating: true,
   error: undefined,
+  last_submission_succeeded: false,
 })
 
 const solved_id_re = new RegExp("/play/([a-zA-Z0-9]{15})/?");
@@ -52,11 +54,13 @@ function fetch_example(source: MouseEvent) {
 function submit_assignment() {
 	state.updating = true;
 	state.error = undefined;
+	state.last_submission_succeeded = false;
 	axios.post(__PLAY_URL__ + "solve", state.assignment).then((response) => {
 		let r = response.data;
 		if (r.Solved) {
 			state.solvedID = r.Solved;
 			history.pushState({}, "", "/play/" + state.solvedID);
+			state.last_submission_succeeded = true;
 		} else {
 			state.error = r.Error;
 		}
@@ -72,11 +76,10 @@ const is_submit_disabled = computed(() => {
 
 <template>
   <header>
-	<img alt="Draw me a db logo" class="logo" src="./assets/logo.svg" width="32" height="32" />
-
-    <div class="wrapper">
-		<div>Draw me a db</div>
-    </div>
+	  <div class="header">
+		  <img alt="Draw me a db logo" class="logo" src="./assets/logo.svg" width="96" height="96" />
+		  <div>Draw me a db</div>
+	  </div>
   </header>
 
   <main>
@@ -87,10 +90,12 @@ const is_submit_disabled = computed(() => {
 			<a @click="fetch_example" name="ex2" href="javascript:void(0)">Bookstore</a>,
 			<a @click="fetch_example" name="ex3" href="javascript:void(0)">UPS</a>.
 		</div>
-		<textarea class="maximized" v-model.trim=state.assignment placeholder="Describe here the entities and relation you want. Load some examples with the link above."></textarea>
-	<button @click="submit_assignment" :disabled="is_submit_disabled">Draw me a db</button>
-	<span v-if=state.error class="error">Failed: {{ state.error }}</span>
-	<span v-if=state.solvedID class="info">Try again for a different answer.</span>
+		<textarea class="maximized assignment" v-model.trim=state.assignment placeholder="Describe here the entities and relation you want. Load some examples with the link above."></textarea>
+	<div class="submit_bar">
+		<div v-if=state.error class="error">Failed: {{ state.error }}</div>
+		<div v-if=state.last_submission_succeeded class="info">Try again for a different answer.</div>
+		<button class="submit_assignment" @click="submit_assignment" :disabled="is_submit_disabled">Draw me a db</button>
+	</div>
 	</Tile>
 	<Tile title="Conceptual model">
 		<GraphRender kind="conceptual" :solvedID=state.solvedID />
@@ -106,46 +111,77 @@ const is_submit_disabled = computed(() => {
 
 <style scoped>
 header {
-  line-height: 1.5;
+  line-height: 1em;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 0rem;
+div.header {
+	display: flex;
+	justify-content: center;
+	margin: auto 0;
+	font-size: 5em;
+	place-items: center;
 }
 
-.tile-row {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
+img.logo {
+	margin-right: 0.5em;
 }
 
-span.error {
-	color: red;
-	padding-left: 1em;
+textarea.assignment {
+	font-family: helvetica;
 }
 
-span.info {
-	color: blue;
-	padding-left: 1em;
+div.error {
+	color: var(--color-error);
+	padding-right: 2em;
 }
-/*
-@media (min-width: 800px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+div.info {
+	color: var(--color-action2);
+	padding-right: 2em;
 }
-*/
+
+div.submit_bar {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+button.submit_assignment {
+	appearance: button;
+	backface-visibility: hidden;
+	background-color: var(--color-action1);
+	border-radius: 6px;
+	border-width: 0;
+	box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset,rgba(50, 50, 93, .1) 0 2px 5px 0,rgba(0, 0, 0, .07) 0 1px 1px 0;
+	box-sizing: border-box;
+	color: #fff;
+	cursor: pointer;
+	font-size: 100%;
+	height: 44px;
+	line-height: 1.15;
+	margin: 12px 0 0;
+	outline: none;
+	overflow: hidden;
+	padding: 0 25px;
+	text-align: center;
+	text-transform: none;
+	transform: translateZ(0);
+	transition: all .2s,box-shadow .08s ease-in;
+	user-select: none;
+	-webkit-user-select: none;
+	touch-action: manipulation;
+	width: 30%;
+}
+
+button.submit_assignment:disabled {
+  cursor: default;
+}
+
+button.submit_assignment:hover {
+  background-color: var(--color-action2);
+}
+
+button.submit_assignment:focus {
+  box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
+}
 </style>
