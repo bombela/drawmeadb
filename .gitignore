@@ -1,3 +1,4 @@
 /websrv/target/
 /websrv/RocketProd.toml
 /websrv/RocketDev.toml
+/dist/

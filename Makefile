@@ -1,5 +1,5 @@
 
-all: release dist
+all: release dist docker
 
 release:
 	cd webui && npm run build
@@ -16,4 +16,7 @@ dist:
 	cp -R MeriseAcide/MeriseAcide0.4.7/MeriseAcide_Linux64 dist/
 	cp -R MeriseAcide/MeriseAcide0.4.7/MeriseAcide dist/
 
-.PHONY: all release dist
+docker:
+	cd dist && docker build -t drawmeadb -f ../Dockerfile .
+
+.PHONY: all release dist docker
