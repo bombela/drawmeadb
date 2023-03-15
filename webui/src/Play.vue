@@ -114,6 +114,10 @@ header {
   justify-content: space-evenly;
 }
 
+span.error {
+	color: red;
+	padding-left: 1em;
+}
 /*
 @media (min-width: 800px) {
   header {
