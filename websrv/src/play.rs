@@ -1,5 +1,6 @@
 use rocket::fs::NamedFile;
 use rocket::serde::{json::Json, Serialize};
+use rocket::State;
 use std::fs;
 use std::path::Path;
 
@@ -25,20 +26,24 @@ enum SolveResponse {
 }
 
 #[post("/solve", data = "<assignment>")]
-async fn solve(assignment: String) -> Json<SolveResponse> {
-    match _solve(assignment).await {
+async fn solve(assignment: String, config: &State<crate::Config>) -> Json<SolveResponse> {
+    match _solve(assignment, &config.chatgpt_api_key).await {
         Ok(id) => Json(SolveResponse::Solved(id)),
         Err(e) => Json(SolveResponse::Error(e)),
     }
 }
 
-async fn _solve(assignment: String) -> Result<SolvedID, String> {
+async fn _solve(assignment: String, chatgpt_api_key: &str) -> Result<SolvedID, String> {
     let mut id = SolvedID::random();
     let mut attempt = 0;
     for _ in 1..=5 {
         attempt += 1;
         let dir = Path::new(VAR_DIR).join(id.as_str());
-        let answer = ask_chatgpt(&assignment).await?;
+        let answer = if chatgpt_api_key.is_empty() {
+            FAKE_CHATGPT_ANSWER.into()
+        } else {
+            ask_chatgpt(&assignment).await?
+        };
         match fs::create_dir_all(&dir) {
             Ok(()) => (),
             Err(e) if e.kind() == std::io::ErrorKind::AlreadyExists => (),
@@ -65,8 +70,8 @@ async fn _solve(assignment: String) -> Result<SolvedID, String> {
 /// - physical.png
 /// - schema.txt
 async fn run_merise_acide(dir: &Path) -> Result<(), String> {
-    use std::process::Command;
     use rocket::tokio::task::spawn_blocking;
+    use std::process::Command;
 
     let mut cmd = Command::new("./MeriseAcide");
     cmd.args(&["-m".into(), dir.join("conceptual.png")]);
@@ -99,7 +104,10 @@ async fn solved_file(id: SolvedID, file: &str) -> Option<NamedFile> {
 }
 
 async fn ask_chatgpt(question: &str) -> Result<String, String> {
-    let a = r#"
+    Ok("#test".into())
+}
+
+const FAKE_CHATGPT_ANSWER: &str = r#"
 # Conceptual data model for a movie rental system.
 
 [Customer]
@@ -143,6 +151,4 @@ Rental      1,1    AssociatedWith2   0,1    Movie
 # Association between Movie and LateFee entities
 # A movie can have 0 or n late fees, and a late fee is associated with exactly one movie.
 Movie       0,n    Has         1,1    LateFee
-    "#;
-    Ok(a.into())
-}
+"#;
