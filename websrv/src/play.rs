@@ -101,7 +101,7 @@ async fn run_merise_acide(dir: &Path) -> Result<(), String> {
     cmd.args(&["-p".into(), dir.join("physical.png")]);
     cmd.args(&["-s".into(), dir.join("schema.txt")]);
     cmd.args(&["-f", "png", "-t", "SQLite"]);
-    cmd.args(&["-c", "-E", "#FF0000", "-A", "#00FF00", "-B", "#0000FF"]);
+    cmd.args(&["-c", "-E", "#edf7fc", "-A", "#E2E2E2", "-B", "#FFFFFF"]);
     cmd.arg(dir.join("answer.txt"));
 
     let output = spawn_blocking(move || cmd.output()).await.unwrap();
