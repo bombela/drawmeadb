@@ -10,11 +10,15 @@ import axios from "axios"
 interface State {
   solvedID?: string,
   assignment: string,
+  updating: boolean,
+  error?: string,
 }
 
 const state: State = reactive({
   solvedID: undefined,
   assignment: "",
+  updating: true,
+  error: undefined,
 })
 
 const solved_id_re = new RegExp("/play/([a-zA-Z0-9]{15})/?");
@@ -22,13 +26,12 @@ onMounted(() => {
 	let match = location.pathname.match(solved_id_re);
 	if (match) {
 		state.solvedID = match[1];
-	}
-})
-
-watch(() => state.solvedID, async (solvedID) => {
-	if (solvedID !== undefined) {
-		let response = await axios.get(__PLAY_URL__ + state.solvedID + "/assignment.txt");
-		state.assignment = response.data;
+		axios.get(__PLAY_URL__ + state.solvedID + "/assignment.txt").then((response) => {
+			state.assignment = response.data;
+			state.updating = false;
+		});
+	} else {
+		state.updating = false;
 	}
 })
 
@@ -41,6 +44,25 @@ function fetch_example(source: MouseEvent) {
 	}
 	return true;
 }
+
+function submit_assignment() {
+	state.updated = true;
+	state.error = undefined;
+	axios.post(__PLAY_URL__ + "solve", state.assignment).then((response) => {
+		let r = response.data;
+		if (r.Solved) {
+			state.solvedID = r.Solved;
+			history.pushState({}, "", "/play/" + state.solvedID);
+		} else {
+			state.error = r.Error;
+		}
+		state.updated = false;
+	});
+}
+
+const is_submit_disabled = computed(() => {
+	return state.updating || state.assignment.length == 0;
+});
 </script>
 
 <template>
@@ -60,8 +82,9 @@ function fetch_example(source: MouseEvent) {
 			<a @click="fetch_example" name="ex2" href="javascript:void(0)">Bookstore</a>,
 			<a @click="fetch_example" name="ex3" href="javascript:void(0)">Fitness tracker</a>.
 		</div>
-		<textarea class="maximized" placeholder="Describe here the entities and relation you want. Load some examples with the link above.">{{ state.assignment }}</textarea>
-	<button>Draw me a db</button>
+		<textarea class="maximized" v-model.trim=state.assignment placeholder="Describe here the entities and relation you want. Load some examples with the link above."></textarea>
+	<button @click="submit_assignment" :disabled="is_submit_disabled">Draw me a db</button>
+	<span v-if=state.error class="error">Failed: {{ state.error }}</span>
 	</Tile>
 	<Tile title="Conceptual model">
 		<GraphRender kind="conceptual" :solvedID=state.solvedID />
