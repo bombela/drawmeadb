@@ -26,8 +26,9 @@ onMounted(() => {
 	let match = location.pathname.match(solved_id_re);
 	if (match) {
 		state.solvedID = match[1];
-		axios.get(__PLAY_URL__ + state.solvedID + "/assignment.txt").then((response) => {
+		axios.get(`${__PLAY_URL__}${state.solvedID}/assignment.txt`).then((response) => {
 			state.assignment = response.data;
+		}).finally(() => {
 			state.updating = false;
 		});
 	} else {
@@ -36,17 +37,20 @@ onMounted(() => {
 })
 
 function fetch_example(source: MouseEvent) {
+	state.updating = true;
 	if (source.target) {
 		let name: string = source.target.name;
-		axios.get("/" + name + ".txt").then((response) => {
+		axios.get(`/${name}.txt`).then((response) => {
 			state.assignment = response.data;
+		}).finally(() => {
+			state.updating = false;
 		});
 	}
 	return true;
 }
 
 function submit_assignment() {
-	state.updated = true;
+	state.updating = true;
 	state.error = undefined;
 	axios.post(__PLAY_URL__ + "solve", state.assignment).then((response) => {
 		let r = response.data;
@@ -56,7 +60,8 @@ function submit_assignment() {
 		} else {
 			state.error = r.Error;
 		}
-		state.updated = false;
+	}).finally(() => {
+		state.updating = false;
 	});
 }
 
