@@ -15,7 +15,7 @@ export default defineConfig(({command, mode}) => {
     },
     base: '/play',
     define: {
-      __PLAY_URL__: '"' + play_url + '"',
+      __PLAY_URL__: play_url,
     },
   }
 })

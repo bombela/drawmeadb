@@ -21,7 +21,7 @@ async function fetch_schema() {
 
 watch(() => props.solvedID, async (solvedID) => {
 	if (solvedID !== undefined) {
-		let response = await axios.get(__PLAY_URL__ + solvedID + "/schema.txt");
+		let response = await axios.get(`__PLAY_URL__/${solvedID}/schema.txt`);
 		state.schema = response.data;
 	}
 })

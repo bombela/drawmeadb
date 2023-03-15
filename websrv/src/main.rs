@@ -1,7 +1,9 @@
 use rocket::{
-    fairing::{Fairing, Info, Kind, AdHoc},
+    fairing::{AdHoc, Fairing, Info, Kind},
+    fs::FileServer,
     http::Header,
-    Request, Response, serde::Deserialize,
+    serde::Deserialize,
+    Request, Response,
 };
 
 #[macro_use]
@@ -38,11 +40,11 @@ fn rocket() -> _ {
         .attach(AdHoc::config::<Config>())
         .mount("/", routes![index])
         .mount("/play", play::routes())
+        .mount("/play", FileServer::from("public/"))
 }
 
-
 #[options("/<_..>")]
-fn cors_all_options() { }
+fn cors_all_options() {}
 
 pub struct Cors;
 
@@ -57,7 +59,10 @@ impl Fairing for Cors {
 
     async fn on_response<'r>(&self, _request: &'r Request<'_>, response: &mut Response<'r>) {
         response.set_header(Header::new("Access-Control-Allow-Origin", "*"));
-        response.set_header(Header::new("Access-Control-Allow-Methods", "GET, POST, OPTIONS"));
+        response.set_header(Header::new(
+            "Access-Control-Allow-Methods",
+            "GET, POST, OPTIONS",
+        ));
         response.set_header(Header::new("Access-Control-Allow-Headers", "*"));
         response.set_header(Header::new("Access-Control-Allow-Credentials", "true"));
     }

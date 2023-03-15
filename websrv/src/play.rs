@@ -16,8 +16,8 @@ pub fn routes() -> Vec<rocket::Route> {
 }
 
 #[get("/")]
-fn index() -> &'static str {
-    "Time to play"
+async fn index() -> Option<NamedFile> {
+    NamedFile::open("public/index.html").await.ok()
 }
 
 #[derive(Serialize)]

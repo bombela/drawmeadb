@@ -6,8 +6,8 @@ const props = defineProps<{
   solvedID?: string,
 }>()
 
-const placeholder_img = computed(() => "/placeholder_" + props.kind + ".png")
-const img = computed(() => __PLAY_URL__ + props.solvedID + "/" + props.kind + ".png")
+const placeholder_img = computed(() => import.meta.env.BASE_URL + "/placeholder_" + props.kind + ".png")
+const img = computed(() => `__PLAY_URL__/${props.solvedID}/${props.kind}.png`)
 </script>
 
 <template>
