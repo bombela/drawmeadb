@@ -42,7 +42,7 @@ onMounted(() => {
 function fetch_example(source: MouseEvent) {
 	state.updating = true;
 	if (source.target) {
-		let name: string = source.target.name;
+		let name: string = (source.target as HTMLButtonElement).name;
 		axios.get(`/${name}.txt`).then((response) => {
 			state.assignment = response.data;
 		}).finally(() => {

@@ -1,10 +1,3 @@
-<script setup lang="ts">
-
-const props = defineProps<{
-	visible: boolean,
-}>()
-</script>
-
 <template>
 	<div class="lds-facebook"><div></div><div></div><div></div></div>
 </template>
