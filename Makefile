@@ -19,4 +19,9 @@ dist:
 docker:
 	cd dist && docker build -t drawmeadb -f ../Dockerfile .
 
-.PHONY: all release dist docker
+deploy: all
+	docker tag drawmeadb:latest registry.fly.io/drawmeadb
+	docker push registry.fly.io/drawmeadb
+	flyctl deploy
+
+.PHONY: all release dist docker deploy

@@ -2,3 +2,4 @@
 /websrv/RocketProd.toml
 /websrv/RocketDev.toml
 /dist/
+/fly.toml
