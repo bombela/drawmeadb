@@ -12,11 +12,17 @@ use solved_id::SolvedID;
 const VAR_DIR: &str = "/tmp/dmadb";
 
 pub fn routes() -> Vec<rocket::Route> {
-    routes![index, solve, solved_file]
+    routes![index, reload, solve, solved_file]
 }
 
 #[get("/")]
 async fn index() -> Option<NamedFile> {
+    NamedFile::open("public/index.html").await.ok()
+}
+
+#[get("/<id>")]
+async fn reload(id: SolvedID) -> Option<NamedFile> {
+    let _unused = id;
     NamedFile::open("public/index.html").await.ok()
 }
 

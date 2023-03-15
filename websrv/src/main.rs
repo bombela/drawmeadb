@@ -22,6 +22,11 @@ async fn index() -> Option<NamedFile> {
     NamedFile::open("welcome.html").await.ok()
 }
 
+#[get("/favicon.ico")]
+async fn favicon() -> Option<NamedFile> {
+    NamedFile::open("play/favicon.ico").await.ok()
+}
+
 #[launch]
 fn rocket() -> _ {
     let mut rocket = rocket::build();
@@ -38,7 +43,7 @@ fn rocket() -> _ {
 
     rocket
         .attach(AdHoc::config::<Config>())
-        .mount("/", routes![index])
+        .mount("/", routes![index, favicon])
         .mount("/play", play::routes())
         .mount("/play", FileServer::from("public/"))
 }

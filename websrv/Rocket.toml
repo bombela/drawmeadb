@@ -1,6 +1,8 @@
 [default]
 address = "0.0.0.0"
+cors_all = false
 chatgpt_api_key = "" # ChatGPT API key
+port = 8042
 
 [debug]
 port = 8042
