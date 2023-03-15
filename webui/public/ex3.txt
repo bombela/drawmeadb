@@ -1,6 +1,14 @@
-Design a relational database for a fitness tracking app that allows users to track their workouts, exercises, and gym memberships Add any additional attributes or entities you deem necessary. You must apply the following relations:
+UPS prides itself on having up-to-date information on the processing and current
+location of each shipped item. To do this, UPS relies on a company-wide
+information system. Shipped items are the heart of the UPS product tracking
+information system. Shipped items can be characterized by item number (unique),
+weight, dimensions, insurance amount, destination, and final delivery date.
+Shipped items are received into the UPS system at a single retail center. Retail
+centers are characterized by their type, uniqueID, and address. Shipped items
+make their way to their destination via one or more standard UPS transportation
+events (i.e., flights, truck deliveries). These transportation events are
+characterized by a unique scheduleNumber, a type (e.g, flight, truck), and a
+deliveryRoute.
 
-    - A user can perform one or more workouts
-    - A workout consists of one or more exercises
-    - A user can belong to one or more gyms
-    - A workout can be led by one or more trainers
+Please create the entities and associations that captures this information about
+the UPS system. Be certain to indicate identifiers and cardinality constraints.

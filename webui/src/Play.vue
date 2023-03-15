@@ -85,11 +85,12 @@ const is_submit_disabled = computed(() => {
 			Examples:
 			<a @click="fetch_example" name="ex1" href="javascript:void(0)">Movie theater</a>,
 			<a @click="fetch_example" name="ex2" href="javascript:void(0)">Bookstore</a>,
-			<a @click="fetch_example" name="ex3" href="javascript:void(0)">Fitness tracker</a>.
+			<a @click="fetch_example" name="ex3" href="javascript:void(0)">UPS</a>.
 		</div>
 		<textarea class="maximized" v-model.trim=state.assignment placeholder="Describe here the entities and relation you want. Load some examples with the link above."></textarea>
 	<button @click="submit_assignment" :disabled="is_submit_disabled">Draw me a db</button>
 	<span v-if=state.error class="error">Failed: {{ state.error }}</span>
+	<span v-if=state.solvedID class="info">Try again for a different answer.</span>
 	</Tile>
 	<Tile title="Conceptual model">
 		<GraphRender kind="conceptual" :solvedID=state.solvedID />
@@ -121,6 +122,11 @@ header {
 
 span.error {
 	color: red;
+	padding-left: 1em;
+}
+
+span.info {
+	color: blue;
 	padding-left: 1em;
 }
 /*
