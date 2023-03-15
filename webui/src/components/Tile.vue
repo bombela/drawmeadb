@@ -14,31 +14,15 @@ defineProps<{
 </template>
 
 <style scoped>
-.square {
+div.square {
 	width: 100%;
-	margin: 10px;
-	padding: 2.5em;
+	margin: 1em;
+	padding: 1em;
 }
 
 h2 {
   font-weight: 800;
   top: -10px;
   text-decoration: underline;
-}
-
-h3 {
-  font-size: 1.2rem;
-}
-
-.greetings h1,
-.greetings h3 {
-  text-align: center;
-}
-
-@media (min-width: 1024px) {
-  .greetings h1,
-  .greetings h3 {
-    text-align: left;
-  }
 }
 </style>

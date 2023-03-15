@@ -2,6 +2,7 @@
 import Tile from './components/Tile.vue'
 import GraphRender from './components/GraphRender.vue'
 import SQL from './components/SQL.vue'
+import Spinner from './components/Spinner.vue'
 
 import { reactive, computed, onMounted, watch } from 'vue'
 
@@ -90,12 +91,16 @@ const is_submit_disabled = computed(() => {
 			<a @click="fetch_example" name="ex2" href="javascript:void(0)">Bookstore</a>,
 			<a @click="fetch_example" name="ex3" href="javascript:void(0)">UPS</a>.
 		</div>
-		<textarea class="maximized assignment" v-model.trim=state.assignment placeholder="Describe here the entities and relation you want. Load some examples with the link above."></textarea>
-	<div class="submit_bar">
-		<div v-if=state.error class="error">Failed: {{ state.error }}</div>
-		<div v-if=state.last_submission_succeeded class="info">Try again for a different answer.</div>
-		<button class="submit_assignment" @click="submit_assignment" :disabled="is_submit_disabled">Draw me a db</button>
-	</div>
+		<textarea class="maximized assignment" v-model.trim=state.assignment :disabled=is_submit_disabled placeholder="Describe here the entities and relation you want. Load some examples with the link above."></textarea>
+		<div class="submit_bar">
+			<div v-if=state.error class="error">Failed: {{ state.error }}</div>
+			<div v-if=state.last_submission_succeeded class="info">Try again for a different answer.</div>
+			
+			<button class="submit_assignment" @click="submit_assignment" :disabled="is_submit_disabled">
+				<Spinner v-if=is_submit_disabled></Spinner>
+				<span v-else>Draw me a db</span>
+			</button>
+		</div>
 	</Tile>
 	<Tile title="Conceptual model">
 		<GraphRender kind="conceptual" :solvedID=state.solvedID />
@@ -112,6 +117,12 @@ const is_submit_disabled = computed(() => {
 <style scoped>
 header {
   line-height: 1em;
+}
+
+main {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(550px, 1fr));
+	justify-items: center;
 }
 
 div.header {
@@ -175,13 +186,14 @@ button.submit_assignment {
 
 button.submit_assignment:disabled {
   cursor: default;
+  background-color: var(--color-action-disabled);
 }
 
-button.submit_assignment:hover {
+button.submit_assignment:hover:enabled {
   background-color: var(--color-action2);
 }
 
-button.submit_assignment:focus {
+button.submit_assignment:focus:enabled {
   box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
 }
 </style>

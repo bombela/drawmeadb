@@ -18,9 +18,15 @@ const img = computed(() => __PLAY_URL__ + props.solvedID + "/" + props.kind + ".
 </template>
 
 <style scoped>
-.imgbox {
+div.imgbox {
 	border: 1px solid var(--color-border);
 	border-radius: 4px;
+	height: 100%;
+}
+img.graph-render {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
 }
 </style>
 
