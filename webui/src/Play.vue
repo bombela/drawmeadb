@@ -73,12 +73,14 @@ function submit_assignment() {
 const is_submit_disabled = computed(() => {
 	return state.updating || state.assignment.length == 0;
 });
+
+const logo = computed(() => { return import.meta.env.BASE_URL + `/logo.svg`; });
 </script>
 
 <template>
   <header>
 	  <div class="header">
-		  <img alt="Draw me a db logo" class="logo" src="./assets/logo.svg" width="96" height="96" />
+		  <img alt="Draw me a db logo" class="logo" :src=logo width="96" height="96" />
 		  <div>Draw me a db</div>
 	  </div>
   </header>

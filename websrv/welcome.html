@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/play/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draw me a database - playground</title>
+	<style>
+div.header {
+	display: flex;
+	justify-content: center;
+	margin: auto 0;
+	font-size: 5em;
+	place-items: center;
+}
+
+img.logo {
+	margin-right: 0.5em;
+}
+
+:root {
+  --vt-c-white: #ffffff;
+  --vt-c-white-soft: #f8f8f8;
+  --vt-c-white-mute: #f2f4f6;
+
+  --vt-c-black: #181818;
+  --vt-c-black-soft: #222222;
+  --vt-c-black-mute: #282828;
+
+  --vt-c-indigo: #2c3e50;
+
+  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
+  --vt-c-divider-light-2: rgba(20, 60, 60, 0.3);
+  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
+  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
+
+  --vt-c-text-light-1: var(--vt-c-indigo);
+  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
+  --vt-c-text-dark-1: var(--vt-c-white);
+  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+}
+
+:root {
+  --color-background: var(--vt-c-white);
+  --color-background-soft: var(--vt-c-white-soft);
+  --color-background-mute: var(--vt-c-white-mute);
+
+  --color-border: var(--vt-c-divider-light-2);
+  --color-border-hover: var(--vt-c-divider-light-1);
+
+  --color-heading: var(--vt-c-text-light-1);
+  --color-text: var(--vt-c-text-light-1);
+
+  --section-gap: 160px;
+
+  --color-action1: #2596be;
+  --color-action2: #1e7898;
+  --color-action-disabled: #b3b3b3;
+  --color-error: #be4d25;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  position: relative;
+  font-weight: normal;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--color-text);
+  background: var(--color-background);
+  transition: color 0.5s, background-color 0.5s;
+  line-height: 1.6;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+    Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+	text-decoration: none;
+	color: var(--color-action1);
+	transition: 0.4s;
+}
+
+@media (hover: hover) {
+	a:hover {
+		color: var(--color-action2);
+	}
+}
+
+button.letsdraw {
+	appearance: button;
+	backface-visibility: hidden;
+	background-color: var(--color-action1);
+	border-radius: 6px;
+	border-width: 0;
+	box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset,rgba(50, 50, 93, .1) 0 2px 5px 0,rgba(0, 0, 0, .07) 0 1px 1px 0;
+	box-sizing: border-box;
+	color: #fff;
+	cursor: pointer;
+	font-size: 100%;
+	height: 44px;
+	line-height: 1.15;
+	margin: 12px 0 0;
+	outline: none;
+	overflow: hidden;
+	padding: 0 25px;
+	text-align: center;
+	text-transform: none;
+	transform: translateZ(0);
+	transition: all .2s,box-shadow .08s ease-in;
+	user-select: none;
+	-webkit-user-select: none;
+	touch-action: manipulation;
+	width: 30%;
+}
+
+button.letsdraw:disabled {
+  cursor: default;
+  background-color: var(--color-action-disabled);
+}
+
+button.letsdraw:hover:enabled {
+  background-color: var(--color-action2);
+}
+
+button.letsdraw:focus:enabled {
+  box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
+}
+
+main {
+	display: grid;
+	grid-template-columns: 1fr;
+	justify-items: center;
+}
+
+h1 {
+  font-weight: 800;
+  padding: 1.2em;
+  font-size: 5em;
+  text-align: center;
+  width: 942px;
+}
+
+h2 {
+  text-align: center;
+  width: 542px;
+}
+
+a.button {
+	margin: 1em;
+	width: 100%;
+	display: grid;
+	grid-template-columns: 1fr;
+	justify-items: center;
+}
+	</style>
+  </head>
+  <body>
+	  <header>
+		  <div class="header">
+			  <img alt="Draw me a db logo" class="logo" src="/play/logo.svg" width="96" height="96" />
+			  <div>Draw me a db</div>
+		  </div>
+	  </header>
+	  <main>
+		  <h1>Relational database assignment?</h1>
+		  <h1>Let the AI do the hard work for you.</h1>
+		  <h2>Effortlessly create the conceptual model,
+			  the conversion to relational, the drawings and the SQL!</h2>
+		<a class="button" href="/play">
+			<button class="letsdraw" formaction="/play">
+				<span v-else>Let AI draw you a database!</span>
+			</button>
+		</a>
+	  </main>
+  </body>
+</html>

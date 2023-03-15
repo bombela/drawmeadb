@@ -1,6 +1,6 @@
 use rocket::{
     fairing::{AdHoc, Fairing, Info, Kind},
-    fs::FileServer,
+    fs::{FileServer, NamedFile},
     http::Header,
     serde::Deserialize,
     Request, Response,
@@ -18,8 +18,8 @@ struct Config {
 }
 
 #[get("/")]
-fn index() -> &'static str {
-    "Hello, world!"
+async fn index() -> Option<NamedFile> {
+    NamedFile::open("welcome.html").await.ok()
 }
 
 #[launch]

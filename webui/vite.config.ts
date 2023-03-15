@@ -5,7 +5,10 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig(({command, mode}) => {
-  const play_url: string = process.env.PLAY_URL || '/play';
+  let play_url: string = process.env.PLAY_URL || '/play';
+  if (command === 'serve') {
+    play_url = '"' + play_url + '"';
+  }
   return {
     plugins: [vue()],
     resolve: {
