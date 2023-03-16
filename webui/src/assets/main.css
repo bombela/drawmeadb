@@ -32,3 +32,7 @@ textarea.maximized {
 	min-width: 100%;
 	min-height: 28em;
 }
+
+textarea.error {
+	color: var(--color-error);
+}

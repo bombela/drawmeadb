@@ -9,20 +9,23 @@ const props = defineProps<{
 
 interface State {
 	schema?: string,
+	error?: string,
 }
 
 const state: State = reactive({
 	schema: undefined,
+	error: undefined,
 })
-
-
-async function fetch_schema() {
-}
 
 watch(() => props.solvedID, async (solvedID) => {
 	if (solvedID !== undefined) {
-		let response = await axios.get(`__PLAY_URL__/${solvedID}/schema.txt`);
-		state.schema = response.data;
+		try {
+			let response = await axios.get(__PLAY_URL__ + `/${solvedID}/schema.txt`);
+			state.schema = response.data;
+			state.error = undefined;
+		} catch (e: any) {
+			state.error = e;
+		}
 	}
 })
 
@@ -30,9 +33,10 @@ watch(() => props.solvedID, async (solvedID) => {
 
 <template>
 		<textarea v-if="solvedID === undefined" class="maximized" disabled readonly>CREATE TABLE ...</textarea>
-		<textarea v-else class="maximized" readonly>{{ state.schema }}</textarea>
+		<textarea v-else-if="state.error !== undefined" class="maximized error"
+		disabled readonly>{{ state.error }}</textarea>
+		<textarea v-else class="maximized" eadonly>{{ state.schema }}</textarea>
 </template>
 
 <style scoped>
 </style>
-

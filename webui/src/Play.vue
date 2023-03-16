@@ -4,33 +4,43 @@ import GraphRender from './components/GraphRender.vue'
 import SQL from './components/SQL.vue'
 import Spinner from './components/Spinner.vue'
 
-import { reactive, computed, onMounted, watch } from 'vue'
+import { reactive, computed, onMounted, watch, ref } from 'vue'
 
 import axios from "axios"
 
-interface State {
+// The text is either the assignment or an error message.
+type AssignmentText =
+	| { ok: true, text: string }
+	| { ok: false, text: string }
+
+type Submission =
+	| { state: "none" }
+	| { state: "success" }
+	| { state: "error", error: string }
+
+interface GlobalState {
   solvedID?: string,
-  assignment: string,
   updating: boolean,
-  error?: string,
-  last_submission_succeeded: boolean,
+  assignment: AssignmentText,
 }
 
-const state: State = reactive({
+const state: GlobalState = reactive({
   solvedID: undefined,
-  assignment: "",
   updating: true,
-  error: undefined,
-  last_submission_succeeded: false,
+  assignment: { ok: true, text: "" },
 })
+const submission = ref<Submission>({ state: "none" });
 
 const solved_id_re = new RegExp("/play/([a-zA-Z0-9]{15})/?");
 onMounted(() => {
 	let match = location.pathname.match(solved_id_re);
 	if (match) {
+		state.updating = true;
 		state.solvedID = match[1];
-		axios.get(`__PLAY_URL__/${state.solvedID}/assignment.txt`).then((response) => {
-			state.assignment = response.data;
+		axios.get(`${__PLAY_URL__}/${state.solvedID}/assignment.txt`).then((response) => {
+			state.assignment = { ok: true, text: response.data };
+		}).catch((e) => {
+			state.assignment = { ok: false, text: e };
 		}).finally(() => {
 			state.updating = false;
 		});
@@ -41,10 +51,13 @@ onMounted(() => {
 
 function fetch_example(source: MouseEvent) {
 	state.updating = true;
+	state.assignment = { ok: true, text: "" };
 	if (source.target) {
 		let name: string = (source.target as HTMLButtonElement).name;
-		axios.get(import.meta.env.BASE_URL + `/${name}.txt`).then((response) => {
-			state.assignment = response.data;
+		axios.get(`${import.meta.env.BASE_URL}/${name}.txt`).then((response) => {
+			state.assignment = { ok: true, text: response.data };
+		}).catch((e) => {
+			state.assignment = { ok: false, text: e };
 		}).finally(() => {
 			state.updating = false;
 		});
@@ -52,29 +65,36 @@ function fetch_example(source: MouseEvent) {
 	return true;
 }
 
+watch(() => [state.assignment.ok, state.assignment.text], (after, before) => {
+	if (!after[0] && after[0] == before[0]) {
+		state.assignment = { ok: true, text: "" };
+	}
+});
+
 function submit_assignment() {
 	state.updating = true;
-	state.error = undefined;
-	state.last_submission_succeeded = false;
-	axios.post("__PLAY_URL__/solve", state.assignment).then((response) => {
+	submission.value = { state: "none" };
+	axios.post(`${__PLAY_URL__}/solve`, state.assignment.text).then((response) => {
 		let r = response.data;
 		if (r.Solved) {
 			state.solvedID = r.Solved;
 			history.pushState({}, "", "/play/" + state.solvedID);
-			state.last_submission_succeeded = true;
+			submission.value = { state: "success" };
 		} else {
-			state.error = r.Error;
+			submission.value = { state: "error", error: r.Error };
 		}
+	}).catch((e: any) => {
+		submission.value = { state: "error", error: e };
 	}).finally(() => {
 		state.updating = false;
 	});
 }
 
 const can_submit_assignment = computed(() => {
-	return state.updating || state.assignment.length == 0;
+	return !state.updating && state.assignment.ok && state.assignment.text.length > 0;
 });
 
-const logo = computed(() => { return import.meta.env.BASE_URL + `/logo.svg`; });
+const logo = computed(() => { return `${import.meta.env.BASE_URL}/logo.svg`; });
 </script>
 
 <template>
@@ -93,12 +113,17 @@ const logo = computed(() => { return import.meta.env.BASE_URL + `/logo.svg`; });
 			<a @click="fetch_example" name="ex2" href="javascript:void(0)">Bookstore</a>,
 			<a @click="fetch_example" name="ex3" href="javascript:void(0)">UPS</a>.
 		</div>
-		<textarea class="maximized assignment" v-model.trim=state.assignment :disabled=state.updating placeholder="Describe here the entities and relation you want. Load some examples with the link above."></textarea>
+		<textarea
+			class="maximized assignment"
+			:class="{ error: !state.assignment.ok }"
+			v-model.trim="state.assignment.text"
+			:disabled=state.updating
+			placeholder="Describe here the entities and relation you want. Load some examples with the link above."></textarea>
 		<div class="submit_bar">
-			<div v-if=state.error class="error">Failed: {{ state.error }}</div>
-			<div v-if=state.last_submission_succeeded class="info">Try again for a different answer.</div>
+			<div v-if="submission.state=='error'" class="error">Failed: {{ submission.error }}</div>
+			<div v-else-if="submission.state=='success'" class="info">Try again for a different answer.</div>
 			
-			<button class="submit_assignment" @click="submit_assignment" :disabled="can_submit_assignment">
+			<button class="submit_assignment" @click="submit_assignment" :disabled="!can_submit_assignment">
 				<Spinner v-if=state.updating></Spinner>
 				<span v-else>Draw me a db</span>
 			</button>
