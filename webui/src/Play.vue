@@ -70,7 +70,7 @@ function submit_assignment() {
 	});
 }
 
-const is_submit_disabled = computed(() => {
+const can_submit_assignment = computed(() => {
 	return state.updating || state.assignment.length == 0;
 });
 
@@ -93,12 +93,12 @@ const logo = computed(() => { return import.meta.env.BASE_URL + `/logo.svg`; });
 			<a @click="fetch_example" name="ex2" href="javascript:void(0)">Bookstore</a>,
 			<a @click="fetch_example" name="ex3" href="javascript:void(0)">UPS</a>.
 		</div>
-		<textarea class="maximized assignment" v-model.trim=state.assignment :disabled=is_submit_disabled placeholder="Describe here the entities and relation you want. Load some examples with the link above."></textarea>
+		<textarea class="maximized assignment" v-model.trim=state.assignment :disabled=state.updating placeholder="Describe here the entities and relation you want. Load some examples with the link above."></textarea>
 		<div class="submit_bar">
 			<div v-if=state.error class="error">Failed: {{ state.error }}</div>
 			<div v-if=state.last_submission_succeeded class="info">Try again for a different answer.</div>
 			
-			<button class="submit_assignment" @click="submit_assignment" :disabled="is_submit_disabled">
+			<button class="submit_assignment" @click="submit_assignment" :disabled="can_submit_assignment">
 				<Spinner v-if=state.updating></Spinner>
 				<span v-else>Draw me a db</span>
 			</button>
